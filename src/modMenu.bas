@@ -21,10 +21,40 @@ End Sub
 
 
 Private Sub CreateVBEMenu()
-
+    
+    Dim objToolbar  As CommandBar
+    Dim objToolbarItem As Object
+    
     Dim objMenu     As CommandBarPopup
     Dim objMenuItem As Object
+    
+    On Error Resume Next
+    Application.VBE.CommandBars("VBA Utilities").Delete
+    On Error GoTo 0
 
+    Set objToolbar = Application.VBE.CommandBars.Add("VBA Utilities", , False, False)
+    objToolbar.Visible = True
+    With objToolbar
+        Set objToolbarItem = .Controls.Add(Type:=msoControlButton)
+        objToolbarItem.Caption = "Make Config File"
+        objToolbarItem.FaceId = 6370
+        objToolbarItem.OnAction = "MakeConfigFile"
+        Call MenuEvents(objToolbarItem)
+        
+        Set objToolbarItem = .Controls.Add(Type:=msoControlButton)
+        objToolbarItem.Caption = "Export"
+        objToolbarItem.FaceId = 6354
+        objToolbarItem.OnAction = "Export"
+        Call MenuEvents(objToolbarItem)
+        
+        Set objToolbarItem = .Controls.Add(Type:=msoControlButton)
+        objToolbarItem.Caption = "Import"
+        objToolbarItem.FaceId = 3177
+        objToolbarItem.OnAction = "Import"
+        Call MenuEvents(objToolbarItem)
+        
+    End With
+    
     Set objMenu = Application.VBE.CommandBars(1).Controls.Add(Type:=msoControlPopup)
     With objMenu
         objMenu.Caption = "E&xport for VCS"
@@ -104,8 +134,5 @@ Public Sub btnExport_onAction(control As IRibbonControl)
 End Sub
 Public Sub btnImport_onAction(control As IRibbonControl)
     Call Import
-End Sub
-Public Sub btnXlToXML_onAction(control As IRibbonControl)
-    Call excelToXML
 End Sub
 
